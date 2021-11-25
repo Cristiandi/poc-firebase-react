@@ -27,6 +27,8 @@ function App() {
   const auth = getAuth(firebaseApp);
 
   onAuthStateChanged(auth, (currentUser) => {
+    currentUser.getIdToken()
+
     setUser(currentUser);
   });
 
@@ -127,6 +129,12 @@ function App() {
     await signOut(auth);
   };
 
+  const getIdToken = async () => {
+    const idToken = await user.getIdToken();
+
+    alert(idToken);
+  };
+
   return (
     <div className="App">
       <div>
@@ -190,7 +198,10 @@ function App() {
           />
           <button type="submit"> Verify OTP </button>
         </form>
-        {verifyOTPMessage && <div><p>{verifyOTPMessage}</p></div>}
+        {
+          verifyOTPMessage &&
+          <div><p>{verifyOTPMessage}</p></div>
+        }
       </div>
       {
         user?.email &&
@@ -198,6 +209,8 @@ function App() {
           <h4> User Logged In: </h4>
           <p>{user?.email}</p>
           <button onClick={logout}> Sign Out </button>
+          <br/>
+          <button onClick={getIdToken}> Get the ID TOKEN </button>
         </div>
       }
     </div>
